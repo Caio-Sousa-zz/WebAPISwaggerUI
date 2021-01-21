@@ -30,6 +30,9 @@ namespace WebAPI
             //services.AddSwaggerConfigurationApiKeySecurity();
 
             services.AddSwaggerConfigurationOAuth2();
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,22 +41,22 @@ namespace WebAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseStaticFiles();
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    GetType().Assembly.GetManifestResourceStream("wwwroot.swagger-ui.index.html");
-                    // c.EnableFilter(null),
-                    // c.EnableValidator(""),
                     c.InjectJavascript("/swagger-ui/js/custom.js");
                     c.InjectStylesheet("/swagger-ui/css/custom.css");
                     c.DefaultModelsExpandDepth(-1);
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1");
                 });
 
-                app.UseStaticFiles(new StaticFileOptions
-                {
-                    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"))
-                });
+               
+
+                //app.UseStaticFiles(new StaticFileOptions
+                //{
+                //    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"))
+                //});
             }
 
             app.UseHttpsRedirection();

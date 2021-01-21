@@ -2,6 +2,7 @@
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WebApi.Config
 {
@@ -26,8 +27,10 @@ namespace WebApi.Config
 
         public static IServiceCollection AddSwaggerConfigBearerToken(this IServiceCollection services)
         {
-            services.AddSwaggerGen(options =>
+            services.AddSwaggerGen(c =>
             {
+                c.DocInclusionPredicate((docName, description) => true);
+
                 //BEARER SECURITY SCHEME
                 OpenApiSecurityScheme securityDefinition = new OpenApiSecurityScheme()
                 {
@@ -44,12 +47,12 @@ namespace WebApi.Config
                     {securityDefinition, new string[] { }},
                 };
 
-                options.SwaggerDoc("v1", GetOpenApiInfo);
+                c.SwaggerDoc("v1", GetOpenApiInfo);
 
-                options.AddSecurityDefinition("jwt_auth", securityDefinition);
+                c.AddSecurityDefinition("jwt_auth", securityDefinition);
 
                 // Make sure swagger UI requires a Bearer token to be specified
-                options.AddSecurityRequirement(securityRequirements);
+                c.AddSecurityRequirement(securityRequirements);
             });
 
             return services;
@@ -59,6 +62,8 @@ namespace WebApi.Config
         {
             services.AddSwaggerGen(c =>
             {
+                c.DocInclusionPredicate((docName, description) => true);
+
                 c.AddSecurityDefinition(ApiKeyConstants.HeaderName, new OpenApiSecurityScheme
                 {
                     Description = "Api key needed to access the endpoints. X-Api-Key: My_API_Key",
@@ -95,6 +100,8 @@ namespace WebApi.Config
         {
             services.AddSwaggerGen(c =>
             {
+                c.DocInclusionPredicate((docName, description) => true);
+
                 OpenApiSecurityScheme securityScheme = new OpenApiSecurityScheme()
                 {
                     Type = SecuritySchemeType.OAuth2,

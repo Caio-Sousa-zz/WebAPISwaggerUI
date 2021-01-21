@@ -1,31 +1,28 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <link href="custom.css" rel="stylesheet" />
-    <link href="swagger-ui.css" rel="stylesheet" />
+    <style>
+        .swagger-section #header {
+            border-bottom: 1px solid #000000;
+            font-style: normal;
+            font-weight: 400;
+            font-family: "Segoe UI Light","Segoe WP Light","Segoe UI","Segoe WP",Tahoma,Arial,sans-serif;
+            background-color: black;
+        }
+
+        .swagger-section #header h1 {
+            text-align: center;
+            font-size: 20px;
+            color: white;
+        }
+    </style>
 </head>
-<body>
-    <h1>Hello World</h1>
-    <div id="swagger-ui"></div>
+<body class="swagger-section">
+    <div id="header">
+        <h1>ToDo API Documentation</h1>
+    </div>
 
-    <footer>
-        <script src="../js/swagger-ui-bundle.js"></script>
-        <script src="../js/swagger-ui-standalone-preset.js"></script>
-        <script>
-            window.onload = function () {
-                const ui = SwaggerUIBundle({
-                    url: "https://localhost:44330/swagger",
-                    dom_id: '#swagger-ui',
-                    presets: [
-                        SwaggerUIBundle.presets.apis,
-                        SwaggerUIStandalonePreset
-                    ]
-                })
-
-                window.ui = ui
-            }
-        </script>
-    </footer>
+    <div id="message-bar" class="swagger-ui-wrap" data-sw-translate>&nbsp;</div>
+    <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
 </body>
 </html>
