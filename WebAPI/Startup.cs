@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
+using WebApi.Config;
 
 namespace WebAPI
 {
@@ -24,46 +25,11 @@ namespace WebAPI
         {
             services.AddControllers();
 
-            services.AddSwaggerGen(options =>
-            {
-                var apiinfo = new OpenApiInfo
-                {
-                    Title = "theta-CandidateAPI",
-                    Version = "v1",
-                    Description = "Candidate API for thetalentbot",
-                    Contact = new OpenApiContact
-                    { 
-                        Name = "thetalentbot", Url = new Uri("https://google.com") 
-                    },
-                    License = new OpenApiLicense()
-                    {
-                        Name = "Commercial",
-                        Url = new Uri("https://google.com")
-                    }
-                };
+            //services.AddSwaggerConfigBearerToken();
 
-                //BEARER SECURITY SCHEME
-                OpenApiSecurityScheme securityDefinition = new OpenApiSecurityScheme()
-                {
-                    Name = "Bearer",
-                    BearerFormat = "JWT",
-                    Scheme = "bearer",
-                    Description = "Specify the authorization token.",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
-                };
+            //services.AddSwaggerConfigurationApiKeySecurity();
 
-                OpenApiSecurityRequirement securityRequirements = new OpenApiSecurityRequirement()
-                {
-                    {securityDefinition, new string[] { }},
-                };
-
-                options.SwaggerDoc("v1", apiinfo);
-                options.AddSecurityDefinition("jwt_auth", securityDefinition);
-              
-                // Make sure swagger UI requires a Bearer token to be specified
-                options.AddSecurityRequirement(securityRequirements);            
-            });
+            services.AddSwaggerConfigurationOAuth2();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,6 +41,9 @@ namespace WebAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
+                    GetType().Assembly.GetManifestResourceStream("wwwroot.swagger-ui.index.html");
+                    // c.EnableFilter(null),
+                    // c.EnableValidator(""),
                     c.InjectJavascript("/swagger-ui/js/custom.js");
                     c.InjectStylesheet("/swagger-ui/css/custom.css");
                     c.DefaultModelsExpandDepth(-1);
