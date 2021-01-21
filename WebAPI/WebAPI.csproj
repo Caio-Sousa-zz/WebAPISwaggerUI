@@ -13,6 +13,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\dist\swagger-ui-bundle.js" />
+    <None Include="wwwroot\dist\swagger-ui-bundle.js.map" />
+    <None Include="wwwroot\dist\swagger-ui-es-bundle-core.js" />
+    <None Include="wwwroot\dist\swagger-ui-es-bundle-core.js.map" />
+    <None Include="wwwroot\dist\swagger-ui-es-bundle.js" />
+    <None Include="wwwroot\dist\swagger-ui-es-bundle.js.map" />
+    <None Include="wwwroot\dist\swagger-ui-standalone-preset.js" />
+    <None Include="wwwroot\dist\swagger-ui-standalone-preset.js.map" />
+    <None Include="wwwroot\dist\swagger-ui.css.map" />
+    <None Include="wwwroot\dist\swagger-ui.js" />
+    <None Include="wwwroot\dist\swagger-ui.js.map" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.6.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.6.3" />
