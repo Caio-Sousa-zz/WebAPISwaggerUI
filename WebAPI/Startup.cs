@@ -5,27 +5,64 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
 using System.IO;
 
 namespace WebAPI
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
-            services.AddSwaggerGen(c =>
+
+            services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
+                var apiinfo = new OpenApiInfo
+                {
+                    Title = "theta-CandidateAPI",
+                    Version = "v1",
+                    Description = "Candidate API for thetalentbot",
+                    Contact = new OpenApiContact
+                    { 
+                        Name = "thetalentbot", Url = new Uri("https://google.com") 
+                    },
+                    License = new OpenApiLicense()
+                    {
+                        Name = "Commercial",
+                        Url = new Uri("https://google.com")
+                    }
+                };
+
+                //BEARER SECURITY SCHEME
+                OpenApiSecurityScheme securityDefinition = new OpenApiSecurityScheme()
+                {
+                    Name = "Bearer",
+                    BearerFormat = "JWT",
+                    Scheme = "bearer",
+                    Description = "Specify the authorization token.",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                };
+
+                OpenApiSecurityRequirement securityRequirements = new OpenApiSecurityRequirement()
+                {
+                    {securityDefinition, new string[] { }},
+                };
+
+                options.SwaggerDoc("v1", apiinfo);
+                options.AddSecurityDefinition("jwt_auth", securityDefinition);
+              
+                // Make sure swagger UI requires a Bearer token to be specified
+                options.AddSecurityRequirement(securityRequirements);            
             });
         }
 
