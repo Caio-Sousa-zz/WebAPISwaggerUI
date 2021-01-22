@@ -29,6 +29,7 @@ namespace WebAPIRedDoc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo() { Title = "WebAPIRedDoc", Version = "v1" });
@@ -47,32 +48,18 @@ namespace WebAPIRedDoc
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseSwagger(c =>
-            //{
-            //    c.PreSerializeFilters.Add((swagger, httpRequest) =>
-            //    {
-            //        swagger.Servers.Add(new OpenApiServer
-            //        {
-            //            Url = $"{httpRequest.Scheme}://{httpRequest.Host}"
-            //        });
-            //    });
-            //});
-
-
             app.UseReDoc(c =>
             {
                 c.DocumentTitle = "API Documentation";
-                c.RoutePrefix = "redoc";
-                c.SpecUrl("../swagger/v1/swagger.json");
-               // c.SpecUrl("../v1/swagger.json");
+                c.SpecUrl = "/swagger/v1/swagger.json";
             });
 
-            //app.UseSwagger();
-            //app.UseSwaggerUI(c =>
-            //{
-            //    c.SwaggerEndpoint("v1/swagger.json", "My API V1");
-            //});
+            app.UseSwagger();
 
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("v1/swagger.json", "My API V1");
+            });
 
             app.UseHttpsRedirection();
 
