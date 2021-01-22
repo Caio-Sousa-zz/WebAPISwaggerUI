@@ -24,16 +24,7 @@ namespace WebAPIRedDoc
 
         public IConfiguration Configuration { get; }
 
-        private static string GetApiLeadingText() => $"##Right now you are reading the documentation for version,  **this API version is not supported any more**.";
-
-        private static string GetDescription()
-        {
-            var file = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "redoc", "description.md");
-
-            string SendData = File.ReadAllText(file);
-
-            return SendData;
-        }
+        private static string GetDescription() =>  File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "redoc", "description.md"));
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
