@@ -23,6 +23,9 @@ namespace WebAPIRedDoc.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Get Weather forecast
+        /// </summary>
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {

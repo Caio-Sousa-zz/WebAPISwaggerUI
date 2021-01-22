@@ -4,5 +4,10 @@
         <name>WebAPIRedDoc</name>
     </assembly>
     <members>
+        <member name="M:WebAPIRedDoc.Controllers.WeatherForecastController.Get">
+            <summary>
+            Get Weather forecast
+            </summary>
+        </member>
     </members>
 </doc>

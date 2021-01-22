@@ -31,7 +31,7 @@ namespace WebAPIRedDoc
             {
                 c.SwaggerDoc("v1", new OpenApiInfo()
                 {
-                    Title = "WebAPIRedDoc", 
+                    Title = "WebAPIRedDoc",
                     Version = "v1",
                     Extensions = new Dictionary<string, IOpenApiExtension>
                     {
@@ -41,7 +41,34 @@ namespace WebAPIRedDoc
                                 { "altText", new OpenApiString("CODTRAN")}
                             }
                         }
-                    }
+                    },
+                    Description = @"This is our API.
+
+                        ## Introduction
+
+                        We can use markdown (with [links](https://example.org)) to explain more about the API.
+
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+                        - Bullet item
+                        - And another bullet item
+
+                        Some more lorem ipsum.
+
+                        ## Logging
+
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+
+                        Here's a sample block:
+
+                        ```bash
+                        curl https://example.org/api/v1/some-method \
+                        -H 'X-Header: value' \
+                        -v
+                        ```
+
+                        Lorem ipsum **doler sit met something more** test text.
+                    ",
                 });
 
                 //BEARER SECURITY SCHEME
@@ -65,9 +92,9 @@ namespace WebAPIRedDoc
                 // Make sure swagger UI requires a Bearer token to be specified
                 c.AddSecurityRequirement(securityRequirements);
 
-                //var xmlFile = $"{Assembly.GetEntryAssembly().GetName().Name}.xml";
-                //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                //c.IncludeXmlComments(xmlPath);
+                var xmlFile = $"{Assembly.GetEntryAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
         }
 
