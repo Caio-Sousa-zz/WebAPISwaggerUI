@@ -43,6 +43,7 @@ namespace WebAPI
                 app.UseDeveloperExceptionPage();
                 app.UseStaticFiles();
                 app.UseSwagger();
+
                 app.UseSwaggerUI(c =>
                 {
                     c.InjectJavascript("/swagger-ui/js/custom.js");
@@ -50,8 +51,6 @@ namespace WebAPI
                     c.DefaultModelsExpandDepth(-1);
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1");
                 });
-
-               
 
                 //app.UseStaticFiles(new StaticFileOptions
                 //{
