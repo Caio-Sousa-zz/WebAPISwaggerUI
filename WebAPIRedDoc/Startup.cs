@@ -44,14 +44,12 @@ namespace WebAPIRedDoc
             {
                 c.SwaggerDoc("v1", new OpenApiInfo()
                 {
-                    Title = "Introdução",
-                    Version = "v1",
                     Extensions = new Dictionary<string, IOpenApiExtension>
                     {
                         {"x-logo", new OpenApiObject
                             {
                                 {"url", new OpenApiString("https://rdlcom.com/wp-content/uploads/qa-testing-as-a-service-test-io-creative-company-logo-terrific-1.png")},
-                                { "altText", new OpenApiString("CODTRAN")}
+                                { "altText", new OpenApiString("COPMANY")}
                             }
                         }
                     },

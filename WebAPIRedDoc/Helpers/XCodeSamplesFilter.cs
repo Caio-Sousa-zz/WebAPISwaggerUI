@@ -4,6 +4,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace WebAPIRedDoc.Helpers
 {
+    //https://blog.kloud.com.au/2017/08/04/swashbuckle-pro-tips-for-aspnet-web-api-part-1/
     //https://stackoverflow.com/questions/55329325/how-to-add-x-code-samples-for-redoc-with-swashbuckle-aspnetcore
     public class XCodeSamplesFilter : IDocumentFilter
     {

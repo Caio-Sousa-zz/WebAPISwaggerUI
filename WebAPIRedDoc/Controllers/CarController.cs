@@ -8,6 +8,7 @@ using WebAPIRedDoc.Models;
 
 namespace WebAPIRedDoc.Controllers
 {
+    [Produces("application/json")]
     [ApiController]
     [Route("[controller]")]
     public class CarController : ControllerBase
