@@ -1,18 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Interfaces;
 
 namespace WebAPIRedDoc
 {
@@ -32,11 +29,45 @@ namespace WebAPIRedDoc
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo() { Title = "WebAPIRedDoc", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo()
+                {
+                    Title = "WebAPIRedDoc", 
+                    Version = "v1",
+                    Extensions = new Dictionary<string, IOpenApiExtension>
+                    {
+                        {"x-logo", new OpenApiObject
+                            {
+                                {"url", new OpenApiString("https://upload.wikimedia.org/wikipedia/pt/thumb/1/14/BHTrans-logo_%281%29.jpg/250px-BHTrans-logo_%281%29.jpg")},
+                                { "altText", new OpenApiString("CODTRAN")}
+                            }
+                        }
+                    }
+                });
 
-                var xmlFile = $"{Assembly.GetEntryAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
+                //BEARER SECURITY SCHEME
+                OpenApiSecurityScheme securityDefinition = new OpenApiSecurityScheme()
+                {
+                    Name = "Bearer",
+                    BearerFormat = "JWT",
+                    Scheme = "bearer",
+                    Description = "Specify the authorization token.",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                };
+
+                OpenApiSecurityRequirement securityRequirements = new OpenApiSecurityRequirement()
+                {
+                    {securityDefinition, new string[] { }},
+                };
+
+                c.AddSecurityDefinition("jwt_auth", securityDefinition);
+
+                // Make sure swagger UI requires a Bearer token to be specified
+                c.AddSecurityRequirement(securityRequirements);
+
+                //var xmlFile = $"{Assembly.GetEntryAssembly().GetName().Name}.xml";
+                //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                //c.IncludeXmlComments(xmlPath);
             });
         }
 

@@ -47,12 +47,12 @@ namespace WebApi.Config
                     {securityDefinition, new string[] { }},
                 };
 
-                c.SwaggerDoc("v1", GetOpenApiInfo);
-
                 c.AddSecurityDefinition("jwt_auth", securityDefinition);
 
                 // Make sure swagger UI requires a Bearer token to be specified
                 c.AddSecurityRequirement(securityRequirements);
+
+                c.SwaggerDoc("v1", GetOpenApiInfo);
             });
 
             return services;
