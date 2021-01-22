@@ -11,6 +11,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Interfaces;
+using WebAPIRedDoc.Helpers;
 
 namespace WebAPIRedDoc
 {
@@ -49,14 +50,15 @@ namespace WebAPIRedDoc
                     {
                         {"x-logo", new OpenApiObject
                             {
-                                {"url", new OpenApiString("https://upload.wikimedia.org/wikipedia/pt/thumb/1/14/BHTrans-logo_%281%29.jpg/250px-BHTrans-logo_%281%29.jpg")},
+                                {"url", new OpenApiString("https://rdlcom.com/wp-content/uploads/qa-testing-as-a-service-test-io-creative-company-logo-terrific-1.png")},
                                 { "altText", new OpenApiString("CODTRAN")}
                             }
                         }
                     },
-                    //Description = $@"## Introdução "
                     Description = GetDescription()
                 });
+
+                c.DocumentFilter<XCodeSamplesFilter>();
 
                 //BEARER SECURITY SCHEME
                 OpenApiSecurityScheme securityDefinition = new OpenApiSecurityScheme()
