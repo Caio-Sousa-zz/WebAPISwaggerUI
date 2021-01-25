@@ -1,16 +1,24 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    <title>ReDoc</title>
+    <!-- needed for adaptive design -->
     <meta charset="utf-8" />
-    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700" rel="stylesheet">
+
+    <!--
+    ReDoc doesn't change outer page styles
+    -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 <body>
-<div id="redoc-container"></div>
-<script src="//cdn.jsdelivr.net/npm/redoc@2.0.0-rc.28/bundles/redoc.standalone.min.js"></script>
-<script src="//cdn.jsdelivr.net/gh/wll8/redoc-try/dist/try.js"></script>
-<script>
-    initTry('localhost:44302/swagger/v1/swagger.json');
-   // initTry('https://petstore.swagger.io/v2/swagger.json');
-</script>
+<redoc spec-url='https://localhost:44302/swagger/v1/swagger.json'></redoc>
+<script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"></script>
 </body>
 </html>

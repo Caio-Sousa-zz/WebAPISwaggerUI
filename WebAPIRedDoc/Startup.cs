@@ -92,7 +92,6 @@ namespace WebAPIRedDoc
                 c.SpecUrl = "/swagger/v1/swagger.json";
                 c.InjectStylesheet("/redoc/custom.css");
                 c.IndexStream = () => GetStream("redoc.index.html"); // requires file to be added as an embedded resource
-              
             });
 
             app.UseSwagger();
