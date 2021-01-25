@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -6,11 +11,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using WebAPIRedDoc.Helpers;
 
 namespace WebAPIRedDoc
@@ -24,7 +24,11 @@ namespace WebAPIRedDoc
 
         public IConfiguration Configuration { get; }
 
-        private static string GetDescription() =>  File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "redoc", "description.md"));
+        private static string GetDescription()
+        {
+            return File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "redoc",
+                "description.md"));
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -33,14 +37,19 @@ namespace WebAPIRedDoc
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo()
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Extensions = new Dictionary<string, IOpenApiExtension>
                     {
-                        {"x-logo", new OpenApiObject
+                        {
+                            "x-logo", new OpenApiObject
                             {
-                                {"url", new OpenApiString("https://rdlcom.com/wp-content/uploads/qa-testing-as-a-service-test-io-creative-company-logo-terrific-1.png")},
-                                { "altText", new OpenApiString("COMPANY")}
+                                {
+                                    "url",
+                                    new OpenApiString(
+                                        "https://rdlcom.com/wp-content/uploads/qa-testing-as-a-service-test-io-creative-company-logo-terrific-1.png")
+                                },
+                                {"altText", new OpenApiString("COMPANY")}
                             }
                         }
                     },
@@ -50,19 +59,19 @@ namespace WebAPIRedDoc
                 c.DocumentFilter<XCodeSamplesFilter>();
 
                 //BEARER SECURITY SCHEME
-                OpenApiSecurityScheme securityDefinition = new OpenApiSecurityScheme()
+                var securityDefinition = new OpenApiSecurityScheme
                 {
                     Name = "Bearer",
                     BearerFormat = "JWT",
                     Scheme = "bearer",
                     Description = "Specify the authorization token.",
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
+                    Type = SecuritySchemeType.Http
                 };
 
-                OpenApiSecurityRequirement securityRequirements = new OpenApiSecurityRequirement()
+                var securityRequirements = new OpenApiSecurityRequirement
                 {
-                    {securityDefinition, new string[] { }},
+                    {securityDefinition, new string[] { }}
                 };
 
                 c.AddSecurityDefinition("jwt_auth", securityDefinition);
@@ -76,30 +85,25 @@ namespace WebAPIRedDoc
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             app.UseStaticFiles();
 
             app.UseReDoc(c =>
             {
+                c.RoutePrefix = "redoc";
                 c.DocumentTitle = "API Documentation";
                 c.SpecUrl = "/swagger/v1/swagger.json";
                 c.InjectStylesheet("/redoc/custom.css");
                 c.IndexStream = () => GetStream("redoc.index.html"); // requires file to be added as an embedded resource
             });
 
+
             app.UseSwagger();
 
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("v1/swagger.json", "My API V1");
-            });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("v1/swagger.json", "My API V1"); });
 
             app.UseHttpsRedirection();
 
@@ -107,16 +111,13 @@ namespace WebAPIRedDoc
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
         public static Stream GetStream(string resourceName)
         {
             var assembly = Assembly.GetAssembly(typeof(Startup));
-            string name = assembly.GetManifestResourceNames().Where(a => a.Contains(resourceName)).FirstOrDefault();
+            var name = assembly.GetManifestResourceNames().Where(a => a.Contains(resourceName)).FirstOrDefault();
 
             return assembly.GetManifestResourceStream(name);
         }

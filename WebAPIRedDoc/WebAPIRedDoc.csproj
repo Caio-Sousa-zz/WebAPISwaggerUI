@@ -10,10 +10,14 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\redoc\index.html" />
+    <Content Remove="wwwroot\redoc\redoc.standalone.js" />
+    <Content Remove="wwwroot\redoc\try.js" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="wwwroot\redoc\index.html" />
+    <EmbeddedResource Include="wwwroot\redoc\redoc.standalone.js" />
+    <EmbeddedResource Include="wwwroot\redoc\try.js" />
   </ItemGroup>
 
   <ItemGroup>

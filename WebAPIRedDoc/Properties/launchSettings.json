@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api-docs",
+      "launchUrl": "redoc",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
