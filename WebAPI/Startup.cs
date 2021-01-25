@@ -39,7 +39,6 @@ namespace WebAPI
 
                 app.UseSwaggerUI(c =>
                 {
-                    c.IndexStream()
                     c.InjectJavascript("/swagger-ui/js/custom.js");
                     c.InjectStylesheet("/swagger-ui/css/custom.css");
                     c.DefaultModelsExpandDepth(-1);
