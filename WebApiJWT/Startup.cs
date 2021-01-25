@@ -26,6 +26,7 @@ namespace WebApiJWT
 
         public IConfiguration Configuration { get; }
 
+        //https://outline.com/SD896s
         //https://www.thecodebuzz.com/jwt-authorization-token-swagger-open-api-asp-net-core-3-0/
         //https://www.thecodebuzz.com/jwt-authentication-in-net-core/
         public void ConfigureServices(IServiceCollection services)
@@ -36,6 +37,27 @@ namespace WebApiJWT
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApiJWT", Version = "v1" });
                 
+                var securityScheme = new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Description = "Enter JWT Bearer authorisation token",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer", // must be lowercase!!!
+                    BearerFormat = "Bearer {token}",
+                    Reference = new OpenApiReference
+                    {
+                        Id = JwtBearerDefaults.AuthenticationScheme,
+                        Type = ReferenceType.SecurityScheme
+                    }
+                };
+                c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    // defines scope - without a protocol use an empty array for global scope
+                    { securityScheme, Array.Empty<string>() }
+                });
+
                 c.OperationFilter<AddAuthorizationHeaderParameterOperationFilter>();
             });
 
