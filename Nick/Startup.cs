@@ -1,3 +1,14 @@
+using System.Collections.Generic;
+using Balta;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,7 +20,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
 
-namespace WebApiJWT
+namespace Nick
 {
     public class Startup
     {
@@ -20,23 +31,46 @@ namespace WebApiJWT
 
         public IConfiguration Configuration { get; }
 
-        //https://outline.com/SD896s
-        //https://www.thecodebuzz.com/jwt-authorization-token-swagger-open-api-asp-net-core-3-0/
-        //https://www.thecodebuzz.com/jwt-authentication-in-net-core/
+        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Authentication through JWT
+            services.AddAuthentication(x=>
+            {
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }) .AddJwtBearer(x=>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Settings.Secret)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    RequireExpirationTime = false,
+                    ValidateLifetime = true
+                };
+            });
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApiJWT", Version = "v1" });
-                
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Nick", Version = "v1" });
+                var security = new Dictionary<string, IEnumerable<string>>
+                {
+                    {"Bearer", new string[] { }},
+                };
+
                 var securityScheme = new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
                     Description = "Enter JWT Bearer authorisation token",
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
+                    Type = SecuritySchemeType.ApiKey,
                     Scheme = "bearer", // must be lowercase!!!
                     BearerFormat = "Bearer {token}",
                     Reference = new OpenApiReference
@@ -51,27 +85,6 @@ namespace WebApiJWT
                     // defines scope - without a protocol use an empty array for global scope
                     { securityScheme, Array.Empty<string>() }
                 });
-
-                c.OperationFilter<AddAuthorizationHeaderParameterOperationFilter>();
-            });
-
-            services.AddAuthentication(option =>
-            {
-                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
- 
-            }).AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = false,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = "https://localhost:44340",
-                    ValidAudience = "https://localhost:44340",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("teste")) //Configuration["JwtToken:SecretKey"]
-                };
             });
         }
 
@@ -82,7 +95,7 @@ namespace WebApiJWT
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApiJWT v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Nick v1"));
             }
 
             app.UseHttpsRedirection();
@@ -90,7 +103,6 @@ namespace WebApiJWT
             app.UseRouting();
 
             app.UseAuthentication();
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
