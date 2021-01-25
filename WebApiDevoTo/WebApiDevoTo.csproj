@@ -4,18 +4,6 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>D:\Axion\Empresa\2021\21 - WebAPI Swagger\WebAPI\WebAPIRedDoc\WebAPIRedDoc.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Content Remove="wwwroot\redoc\index.html" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="wwwroot\redoc\index.html" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.ReDoc" Version="5.6.3" />

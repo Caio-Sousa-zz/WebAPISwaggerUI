@@ -3,29 +3,28 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WebApi.Config;
+using Microsoft.OpenApi.Models;
 
-namespace WebAPI
+namespace WebApiDevoTo
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
+        public IConfiguration Configuration { get; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddControllers();
-
-            //services.AddSwaggerConfigBearerToken();
-
-            //services.AddSwaggerConfigurationApiKeySecurity();
-
-            services.AddSwaggerConfigurationOAuth2();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApiDevoTo", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,17 +33,17 @@ namespace WebAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseStaticFiles();
-                app.UseSwagger();
-
-                app.UseSwaggerUI(c =>
+                app.UseReDoc(c =>
                 {
-                    c.IndexStream()
-                    c.InjectJavascript("/swagger-ui/js/custom.js");
-                    c.InjectStylesheet("/swagger-ui/css/custom.css");
-                    c.DefaultModelsExpandDepth(-1);
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1");
+                    c.DocumentTitle = "REDOC API Documentation";
+                    c.SpecUrl = "/swagger/v1/swagger.json";
                 });
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                    {
+                        c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApiDevoTo v1");
+                    }
+                );
             }
 
             app.UseHttpsRedirection();

@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Interfaces;
 using WebAPIRedDoc.Helpers;
 
 namespace WebAPIRedDoc
@@ -40,7 +40,7 @@ namespace WebAPIRedDoc
                         {"x-logo", new OpenApiObject
                             {
                                 {"url", new OpenApiString("https://rdlcom.com/wp-content/uploads/qa-testing-as-a-service-test-io-creative-company-logo-terrific-1.png")},
-                                { "altText", new OpenApiString("COPMANY")}
+                                { "altText", new OpenApiString("COMPANY")}
                             }
                         }
                     },
@@ -84,13 +84,15 @@ namespace WebAPIRedDoc
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles();
+
             app.UseReDoc(c =>
             {
                 c.DocumentTitle = "API Documentation";
                 c.SpecUrl = "/swagger/v1/swagger.json";
                 c.InjectStylesheet("/redoc/custom.css");
-                //c.IndexStream = () => GetType().Assembly
-                //                               .GetManifestResourceStream("redoc.index.html"); // requires file to be added as an embedded resource
+                c.IndexStream = () => GetStream("redoc.index.html"); // requires file to be added as an embedded resource
+              
             });
 
             app.UseSwagger();
@@ -110,6 +112,14 @@ namespace WebAPIRedDoc
             {
                 endpoints.MapControllers();
             });
+        }
+
+        public static Stream GetStream(string resourceName)
+        {
+            var assembly = Assembly.GetAssembly(typeof(Startup));
+            string name = assembly.GetManifestResourceNames().Where(a => a.Contains(resourceName)).FirstOrDefault();
+
+            return assembly.GetManifestResourceStream(name);
         }
     }
 }
